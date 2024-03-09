@@ -5,6 +5,8 @@ import torch
 
 """Override Chatbot.postprocess"""
 
+MODEL_PATH="/home/zhiwang/LLM/Model/visualglm-6b/model_config.json"
+
 def postprocess(self, y):
     if y is None:
         return []
@@ -89,11 +91,11 @@ NOTES = 'This app is adapted from <a href="https://github.com/THUDM/VisualGLM-6B
 
 def main(args):
     global model, tokenizer
-    tokenizer = AutoTokenizer.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
     if args.quant in [4, 8]:
-        model = AutoModel.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True).quantize(args.quant).half().cuda()
+        model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True).quantize(args.quant).half().cuda()
     else:
-        model = AutoModel.from_pretrained("THUDM/visualglm-6b", trust_remote_code=True).half().cuda()
+        model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True).half().cuda()
     model = model.eval()
 
     with gr.Blocks(css='style.css') as demo:

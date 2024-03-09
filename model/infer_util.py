@@ -18,14 +18,18 @@ def get_infer_setting(gpu_device=0, quant=None):
         skip_init=True,
         device='cuda' if quant is None else 'cpu',
     )
-    model, args = VisualGLMModel.from_pretrained('visualglm-6b', args)
+   
+    MODEL_PATH = os.environ.get('MODEL_PATH', '/home/zhiwang/LLM/Model/visualglm-6b')
+    TOKENIZER_PATH = os.environ.get("TOKENIZER_PATH", MODEL_PATH)
+
+    model, args = VisualGLMModel.from_pretrained(MODEL_PATH, args)
     model.add_mixin('auto-regressive', CachedAutoregressiveMixin())
     assert quant in [None, 4, 8]
     if quant is not None:
         quantize(model.transformer, quant)
     model.eval()
     model = model.cuda()
-    tokenizer = AutoTokenizer.from_pretrained("THUDM/chatglm-6b", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_PATH, trust_remote_code=True)
     return model, tokenizer
 
 def is_chinese(text):

@@ -78,6 +78,10 @@ def clear_fn2(value):
 
 
 def main(args):
+    
+    print("yxdz-args")
+    print(args)
+
     gr.close_all()
     global model, tokenizer
     model, tokenizer = get_infer_setting(gpu_device=0, quant=args.quant)
